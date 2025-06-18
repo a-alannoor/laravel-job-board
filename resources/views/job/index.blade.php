@@ -3,5 +3,5 @@
     @foreach ($jobs as $job)
         <div>{{ $job['title'] }}: {{ $job['salary'] }}</div>
     @endforeach
-    <p>My name is: {{ $name }}</p>
+    <p>My name as is: {{ $name }}</p>
 </div>
