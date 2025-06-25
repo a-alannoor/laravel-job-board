@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
-        $comments = Comment::cursorPaginate(10);
+        $comments = Comment::paginate(10);
         // $comments = Comment::simplePaginate(10);
         return view(
             'comment.index',
@@ -20,7 +23,20 @@ class CommentController extends Controller
         );
     }
 
-    function create()
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('comment.create', [
+            'psgeTitle' => 'Comment - Create New One', 
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
         Comment::create([
             'content' => 'Comment Content',
@@ -31,7 +47,10 @@ class CommentController extends Controller
         return redirect('posts');
     }
 
-    function show(int $id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
         $commnet = Comment::findOrFail($id);
         return view(
@@ -43,5 +62,29 @@ class CommentController extends Controller
         );
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        return view('comment.edit' , [
+            'pageTitle' => 'Comment - Update this Comment', 
+        ]);
+    }
 
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
 }

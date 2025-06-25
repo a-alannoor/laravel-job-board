@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
         $posts = Post::cursorPaginate(5);
         return view(
@@ -19,31 +22,63 @@ class PostController extends Controller
         );
     }
 
-    function create()
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        Post::create([
-            'title' => 'Post Title',
-            'body' => 'Post Bodyyyyyyyyyyyyyyyyy',
-            'published' => true,
-            'author' => 'Abdullah',
+        return view('post.create', [
+            'pageTitle' => 'Post - Create New One'
         ]);
-
-        return redirect('posts');
     }
 
-    function show(int $id)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
         $post = Post::findOrFail($id);
 
         return view(
-            'post/show',[
+            'post/show',
+            [
                 'post' => $post,
                 'pageTitle' => 'Post Show',
-            ]);
+            ]
+        );
     }
 
-    function delete(int $id)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
-        Post::destroy($id);
+        return view('post.edit', [
+            'pageTitle' => 'Post - Edit New One'
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        // @Todo this will be completed when the api works
     }
 }

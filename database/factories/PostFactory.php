@@ -22,7 +22,7 @@ class PostFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'body' => fake()->paragraph(),
+            'body' => fake()->paragraph(5, variableNbSentences: true),
             'published' => fake()->boolean(),
             'author' => fake()->name(),
             'created_at'=> now(),
