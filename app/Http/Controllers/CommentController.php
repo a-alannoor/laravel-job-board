@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::paginate(10);
+        $comments = Comment::latest()->paginate(10);
         // $comments = Comment::simplePaginate(10);
         return view(
             'comment.index',
@@ -28,23 +29,22 @@ class CommentController extends Controller
      */
     public function create()
     {
-        return view('comment.create', [
-            'psgeTitle' => 'Comment - Create New One', 
-        ]);
+        return redirect("/post");
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request)
     {
-        Comment::create([
-            'content' => 'Comment Content',
-            'post_id' => 13,
-            'author' => 'Abdullah',
-        ]);
+        $comment = new Comment();
+        $comment->post_id = $request->input('post_id');
+        $comment->author = $request->input('author');
+        $comment->content = $request->input('content');
 
-        return redirect('posts');
+        $comment->save();
+
+        return redirect("/post/$comment->post_id")->with('success', 'The comment is created successfully.');
     }
 
     /**

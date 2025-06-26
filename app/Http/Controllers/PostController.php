@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::cursorPaginate(5);
+        $posts = Post::latest()->paginate(5);
         return view(
             'post/index',
             [
@@ -35,9 +37,17 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        //
+        $post = new Post();
+        $post->title = $request->input('title');
+        $post->author = $request->input('author');
+        $post->body = $request->input(key: 'body');
+        $post->published = $request->has('published');
+
+        $post->save();
+
+        return redirect('/post')->with('success', 'The post created successfully.');
     }
 
     /**
@@ -61,17 +71,28 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
+        $post = Post::findOrFail($id);
         return view('post.edit', [
-            'pageTitle' => 'Post - Edit New One'
+            'pageTitle' => 'Post - Edit Post: ' . $post->title,
+            'post' => $post,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StorePostRequest $request, string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        $post->title = $request->input('title');
+        $post->author = $request->input('author');
+        $post->body = $request->input(key: 'body');
+        $post->published = $request->has('published');
+
+        $post->update();
+
+        return redirect('/post')->with('success', 'The post updated successfully.');
     }
 
     /**
@@ -79,6 +100,7 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        // @Todo this will be completed when the api works
+        Post::findOrFail($id)->delete();
+        return redirect('/post')->with('success', 'Post deleted successfully');
     }
 }
